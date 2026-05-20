@@ -2,9 +2,18 @@
   "name": "bentobox",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.12.1",
   "scripts": {
-    "dev": "npm run dev --prefix client",
-    "build": "npm run build --prefix client",
-    "lint": "npm run lint --prefix client"
+    "dev": "pnpm --filter client dev",
+    "build": "pnpm --filter client build",
+    "lint": "pnpm --filter client lint"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@tsparticles/engine",
+      "sharp",
+      "unrs-resolver"
+    ]
   }
 }
+
