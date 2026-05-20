@@ -1,4 +1,4 @@
-import type { BlockStyle } from '@bentobox/shared';
+import type { BlockStyle } from '@/types';
 import { SHADOW_MAP } from './constants';
 
 export function cn(...classes: (string | undefined | null | false)[]): string {

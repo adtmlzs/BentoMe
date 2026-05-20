@@ -1,7 +1,7 @@
 'use client';
 
-import type { BlockType, BlockContentMap } from '@bentobox/shared';
-import { BLOCK_TYPES } from '@bentobox/shared';
+import type { BlockType, BlockContentMap } from '@/types';
+import { BLOCK_TYPES } from '@/types';
 import { useBuilderStore } from '@/stores/builderStore';
 import { BLOCK_TYPE_LABELS, BLOCK_TYPE_DESCRIPTIONS } from '@/lib/constants';
 import { BlockSettings } from './BlockSettings';
@@ -16,6 +16,23 @@ const DEFAULT_CONTENT: { [K in BlockType]: BlockContentMap[K] } = {
   social: { platform: 'Instagram', handle: 'username', url: 'https://instagram.com/username' },
   header: { title: 'Your Name', subtitle: 'Creative · Designer · Builder' },
   spacer: { height: 1 },
+  vibeTracker: {
+    items: [
+      { icon: '🎧', label: 'Listening', value: 'Blonde — Frank Ocean' },
+      { icon: '📖', label: 'Reading', value: 'Atomic Habits' },
+      { icon: '🎬', label: 'Watching', value: 'Severance S2' },
+    ],
+  },
+  progressBar: { title: 'Book Goal 2026', currentValue: 14, targetValue: 52 },
+  lanyard: { discordUserId: '', showSpotify: true, showActivity: true, showStatus: true },
+  animatedText: { text: 'CYBER_AESTHETIC', textAnimation: 'glitch', fontSize: 'xl', fontWeight: 'bold', textAlign: 'center', glitchColor1: '#ff0000', glitchColor2: '#00ffff' },
+  digitalPet: { petName: 'Glitch', petType: 'ghost' },
+  timeline: {
+    items: [
+      { id: '1', year: '2024 - Present', title: 'Senior Engineer', subtitle: 'Acme Corp', type: 'experience' },
+      { id: '2', year: '2020 - 2024', title: 'B.S. Computer Science', subtitle: 'State University', type: 'education' }
+    ]
+  },
 };
 
 export function BuilderSidebar() {

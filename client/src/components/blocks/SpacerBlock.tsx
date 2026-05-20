@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@bentobox/shared';
+import type { Block } from '@/types';
 
 interface SpacerBlockProps {
   block: Block<'spacer'>;

@@ -19,8 +19,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@bentobox/shared": ["../shared/src"]
+      "@/*": ["./src/*"]
     }
   },
   "include": [

@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@bentobox/shared';
+import type { Block } from '@/types';
 import { useBuilderStore } from '@/stores/builderStore';
 import { BLOCK_TYPE_LABELS } from '@/lib/constants';
 
@@ -211,6 +211,348 @@ export function BlockSettings({ block }: BlockSettingsProps) {
                 className="input-field"
               />
             </Field>
+          </>
+        );
+      }
+      case 'vibeTracker': {
+        const content = block.content as Block<'vibeTracker'>['content'];
+        const items = content.items ?? [];
+        return (
+          <>
+            {items.map((item, i) => (
+              <div key={i} className="space-y-2 p-3 rounded-xl bg-white/[0.03] border border-white/5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-semibold text-white/30 uppercase tracking-wider">
+                    Item {i + 1}
+                  </span>
+                  <button
+                    onClick={() => {
+                      const next = items.filter((_, idx) => idx !== i);
+                      updateBlockContent(block.id, { items: next });
+                    }}
+                    className="text-[10px] text-red-400/60 hover:text-red-400 transition-colors"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <Field label="Icon (emoji)">
+                  <input
+                    type="text"
+                    value={item.icon}
+                    onChange={(e) => {
+                      const next = [...items];
+                      next[i] = { ...item, icon: e.target.value };
+                      updateBlockContent(block.id, { items: next });
+                    }}
+                    className="input-field"
+                  />
+                </Field>
+                <Field label="Label">
+                  <input
+                    type="text"
+                    value={item.label}
+                    onChange={(e) => {
+                      const next = [...items];
+                      next[i] = { ...item, label: e.target.value };
+                      updateBlockContent(block.id, { items: next });
+                    }}
+                    className="input-field"
+                  />
+                </Field>
+                <Field label="Value">
+                  <input
+                    type="text"
+                    value={item.value}
+                    onChange={(e) => {
+                      const next = [...items];
+                      next[i] = { ...item, value: e.target.value };
+                      updateBlockContent(block.id, { items: next });
+                    }}
+                    className="input-field"
+                  />
+                </Field>
+              </div>
+            ))}
+            <button
+              onClick={() => {
+                const next = [...items, { icon: '🎵', label: 'Listening', value: '' }];
+                updateBlockContent(block.id, { items: next });
+              }}
+              className="w-full py-2 rounded-xl border border-dashed border-white/10 text-xs text-white/40 hover:text-white/60 hover:border-white/20 transition-all"
+            >
+              + Add Item
+            </button>
+          </>
+        );
+      }
+      case 'progressBar': {
+        const content = block.content as Block<'progressBar'>['content'];
+        return (
+          <>
+            <Field label="Title">
+              <input
+                type="text"
+                value={content.title}
+                onChange={(e) => updateBlockContent(block.id, { title: e.target.value })}
+                className="input-field"
+              />
+            </Field>
+            <Field label="Current Value">
+              <input
+                type="number"
+                min={0}
+                value={content.currentValue}
+                onChange={(e) => updateBlockContent(block.id, { currentValue: Number(e.target.value) })}
+                className="input-field"
+              />
+            </Field>
+            <Field label="Target Value">
+              <input
+                type="number"
+                min={1}
+                value={content.targetValue}
+                onChange={(e) => updateBlockContent(block.id, { targetValue: Number(e.target.value) })}
+                className="input-field"
+              />
+            </Field>
+          </>
+        );
+      }
+      case 'lanyard': {
+        const content = block.content as Block<'lanyard'>['content'];
+        return (
+          <>
+            <Field label="Discord User ID">
+              <input
+                type="text"
+                value={content.discordUserId}
+                onChange={(e) => updateBlockContent(block.id, { discordUserId: e.target.value })}
+                className="input-field"
+                placeholder="e.g. 123456789012345678"
+              />
+            </Field>
+            <div className="space-y-2 mt-4">
+              <label className="flex items-center gap-2 text-xs text-white/70">
+                <input
+                  type="checkbox"
+                  checked={content.showStatus}
+                  onChange={(e) => updateBlockContent(block.id, { showStatus: e.target.checked })}
+                  className="rounded bg-white/5 border-white/10 text-violet-500 focus:ring-violet-500"
+                />
+                Show Online Status
+              </label>
+              <label className="flex items-center gap-2 text-xs text-white/70">
+                <input
+                  type="checkbox"
+                  checked={content.showSpotify}
+                  onChange={(e) => updateBlockContent(block.id, { showSpotify: e.target.checked })}
+                  className="rounded bg-white/5 border-white/10 text-violet-500 focus:ring-violet-500"
+                />
+                Show Spotify
+              </label>
+              <label className="flex items-center gap-2 text-xs text-white/70">
+                <input
+                  type="checkbox"
+                  checked={content.showActivity}
+                  onChange={(e) => updateBlockContent(block.id, { showActivity: e.target.checked })}
+                  className="rounded bg-white/5 border-white/10 text-violet-500 focus:ring-violet-500"
+                />
+                Show Game Activity
+              </label>
+            </div>
+          </>
+        );
+      }
+      case 'animatedText': {
+        const content = block.content as Block<'animatedText'>['content'];
+        return (
+          <>
+            <Field label="Text">
+              <textarea
+                value={content.text}
+                onChange={(e) => updateBlockContent(block.id, { text: e.target.value })}
+                className="input-field min-h-[80px] resize-y"
+                rows={3}
+              />
+            </Field>
+            <Field label="Animation Mode">
+              <select
+                value={content.textAnimation}
+                onChange={(e) => updateBlockContent(block.id, { textAnimation: e.target.value as 'glitch' | 'hackerDecode' | 'typewriter' | 'wave' })}
+                className="input-field"
+              >
+                <option value="glitch">Glitch</option>
+                <option value="hackerDecode">Hacker Decode</option>
+                <option value="typewriter">Typewriter</option>
+                <option value="wave">Wave</option>
+              </select>
+            </Field>
+            <Field label="Font Size">
+              <select
+                value={content.fontSize ?? 'md'}
+                onChange={(e) => updateBlockContent(block.id, { fontSize: e.target.value as 'sm' | 'md' | 'lg' | 'xl' })}
+                className="input-field"
+              >
+                <option value="sm">Small</option>
+                <option value="md">Medium</option>
+                <option value="lg">Large</option>
+                <option value="xl">Extra Large</option>
+              </select>
+            </Field>
+            <Field label="Alignment">
+              <div className="flex gap-1">
+                {(['left', 'center', 'right'] as const).map((align) => (
+                  <button
+                    key={align}
+                    onClick={() => updateBlockContent(block.id, { textAlign: align })}
+                    className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                      content.textAlign === align
+                        ? 'bg-violet-500 text-white'
+                        : 'bg-white/5 text-white/50 hover:bg-white/10'
+                    }`}
+                  >
+                    {align.charAt(0).toUpperCase() + align.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </Field>
+            {content.textAnimation === 'glitch' && (
+              <div className="grid grid-cols-2 gap-2">
+                <Field label="Glitch Color 1">
+                  <input
+                    type="color"
+                    value={content.glitchColor1 ?? '#ff0000'}
+                    onChange={(e) => updateBlockContent(block.id, { glitchColor1: e.target.value })}
+                    className="w-full h-8 rounded-lg cursor-pointer border-0 bg-transparent"
+                  />
+                </Field>
+                <Field label="Glitch Color 2">
+                  <input
+                    type="color"
+                    value={content.glitchColor2 ?? '#00ffff'}
+                    onChange={(e) => updateBlockContent(block.id, { glitchColor2: e.target.value })}
+                    className="w-full h-8 rounded-lg cursor-pointer border-0 bg-transparent"
+                  />
+                </Field>
+              </div>
+            )}
+          </>
+        );
+      }
+      case 'timeline': {
+        const content = block.content as Block<'timeline'>['content'];
+        const items = content.items ?? [];
+        return (
+          <>
+            {items.map((item, i) => (
+              <div key={item.id} className="space-y-2 p-3 rounded-xl bg-white/[0.03] border border-white/5 mb-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-semibold text-white/30 uppercase tracking-wider">
+                    Item {i + 1}
+                  </span>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        if (i > 0) {
+                          const next = [...items];
+                          [next[i - 1], next[i]] = [next[i], next[i - 1]];
+                          updateBlockContent(block.id, { items: next });
+                        }
+                      }}
+                      className="text-[10px] text-white/40 hover:text-white transition-colors disabled:opacity-30"
+                      disabled={i === 0}
+                    >
+                      ↑
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (i < items.length - 1) {
+                          const next = [...items];
+                          [next[i], next[i + 1]] = [next[i + 1], next[i]];
+                          updateBlockContent(block.id, { items: next });
+                        }
+                      }}
+                      className="text-[10px] text-white/40 hover:text-white transition-colors disabled:opacity-30"
+                      disabled={i === items.length - 1}
+                    >
+                      ↓
+                    </button>
+                    <button
+                      onClick={() => {
+                        const next = items.filter((_, idx) => idx !== i);
+                        updateBlockContent(block.id, { items: next });
+                      }}
+                      className="text-[10px] text-red-400/60 hover:text-red-400 transition-colors ml-2"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+                <Field label="Year">
+                  <input
+                    type="text"
+                    value={item.year}
+                    onChange={(e) => {
+                      const next = [...items];
+                      next[i] = { ...item, year: e.target.value };
+                      updateBlockContent(block.id, { items: next });
+                    }}
+                    className="input-field"
+                    placeholder="e.g. 2024 - Present"
+                  />
+                </Field>
+                <Field label="Title">
+                  <input
+                    type="text"
+                    value={item.title}
+                    onChange={(e) => {
+                      const next = [...items];
+                      next[i] = { ...item, title: e.target.value };
+                      updateBlockContent(block.id, { items: next });
+                    }}
+                    className="input-field"
+                    placeholder="e.g. Senior Engineer"
+                  />
+                </Field>
+                <Field label="Subtitle / Company">
+                  <input
+                    type="text"
+                    value={item.subtitle}
+                    onChange={(e) => {
+                      const next = [...items];
+                      next[i] = { ...item, subtitle: e.target.value };
+                      updateBlockContent(block.id, { items: next });
+                    }}
+                    className="input-field"
+                    placeholder="e.g. Acme Corp"
+                  />
+                </Field>
+                <Field label="Type">
+                  <select
+                    value={item.type}
+                    onChange={(e) => {
+                      const next = [...items];
+                      next[i] = { ...item, type: e.target.value as 'experience' | 'education' | 'certification' };
+                      updateBlockContent(block.id, { items: next });
+                    }}
+                    className="input-field"
+                  >
+                    <option value="experience">Experience</option>
+                    <option value="education">Education</option>
+                    <option value="certification">Certification</option>
+                  </select>
+                </Field>
+              </div>
+            ))}
+            <button
+              onClick={() => {
+                const next = [...items, { id: crypto.randomUUID(), year: new Date().getFullYear().toString(), title: 'New Role', subtitle: 'Company', type: 'experience' as const }];
+                updateBlockContent(block.id, { items: next });
+              }}
+              className="w-full py-2 rounded-xl border border-dashed border-white/10 text-xs text-white/40 hover:text-white/60 hover:border-white/20 transition-all mt-2"
+            >
+              + Add Timeline Item
+            </button>
           </>
         );
       }

@@ -47,6 +47,88 @@ body {
   }
 }
 
+/* ─── Custom Cursor Styles ──────────────────────────────────────── */
+
+.cursor-custom-crosshair,
+.cursor-custom-crosshair * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cline x1='12' y1='2' x2='12' y2='8' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='12' y1='16' x2='12' y2='22' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='2' y1='12' x2='8' y2='12' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='16' y1='12' x2='22' y2='12' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='12' r='2' fill='%23fff'/%3E%3C/svg%3E") 12 12, crosshair;
+}
+
+.cursor-custom-neon,
+.cursor-custom-neon * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='8' fill='none' stroke='%238B5CF6' stroke-width='2'/%3E%3Ccircle cx='10' cy='10' r='3' fill='%238B5CF6'/%3E%3C/svg%3E") 10 10, pointer;
+}
+
+.cursor-custom-katana,
+.cursor-custom-katana * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cline x1='4' y1='20' x2='20' y2='4' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3Cline x1='16' y1='4' x2='20' y2='4' stroke='%23ff4444' stroke-width='2' stroke-linecap='round'/%3E%3Cline x1='20' y1='4' x2='20' y2='8' stroke='%23ff4444' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 4 4, default;
+}
+
+.cursor-custom-dot,
+.cursor-custom-dot * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Ccircle cx='6' cy='6' r='5' fill='%23fff' opacity='0.8'/%3E%3C/svg%3E") 6 6, default;
+}
+
+/* ─── Glitch Text Effect (Phase 4) ──────────────────────────────── */
+
+@keyframes glitch-1 {
+  0%, 100% { clip-path: inset(0 0 90% 0); transform: translate(-2px, 0); }
+  20% { clip-path: inset(30% 0 40% 0); transform: translate(2px, 0); }
+  40% { clip-path: inset(60% 0 10% 0); transform: translate(-1px, 0); }
+  60% { clip-path: inset(10% 0 70% 0); transform: translate(1px, 0); }
+  80% { clip-path: inset(80% 0 5% 0); transform: translate(-2px, 0); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { clip-path: inset(90% 0 0 0); transform: translate(2px, 0); }
+  20% { clip-path: inset(40% 0 30% 0); transform: translate(-2px, 0); }
+  40% { clip-path: inset(10% 0 60% 0); transform: translate(1px, 0); }
+  60% { clip-path: inset(70% 0 10% 0); transform: translate(-1px, 0); }
+  80% { clip-path: inset(5% 0 80% 0); transform: translate(2px, 0); }
+}
+
+.glitch-text {
+  position: relative;
+  /* Defaults */
+  --glitch-color-1: #ff0000;
+  --glitch-color-2: #00ffff;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.glitch-text:hover::before {
+  opacity: 0.8;
+  color: var(--glitch-color-1);
+  animation: glitch-1 0.3s infinite linear;
+}
+
+.glitch-text:hover::after {
+  opacity: 0.8;
+  color: var(--glitch-color-2);
+  animation: glitch-2 0.3s infinite linear;
+}
+
+/* ─── Typewriter Cursor ─────────────────────────────────────────── */
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typewriter-cursor {
+  animation: blink-cursor 0.8s infinite;
+}
+
 /* Builder form inputs */
 .input-field {
   @apply w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/20 focus:outline-none focus:ring-1 focus:ring-violet-500 focus:border-violet-500 transition-all;

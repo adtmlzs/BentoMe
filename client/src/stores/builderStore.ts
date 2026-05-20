@@ -7,16 +7,18 @@ import type {
   ThemeConfig,
   ProfileMeta,
   GridPosition,
-} from '@bentobox/shared';
-import { DEFAULT_BLOCK_STYLE, DEFAULT_GRID_CONFIG, DEFAULT_THEME_CONFIG } from '@bentobox/shared';
+} from '@/types';
+import { DEFAULT_BLOCK_STYLE, DEFAULT_GRID_CONFIG, DEFAULT_THEME_CONFIG } from '@/types';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { v4 as uuidv4 } from 'uuid';
+import { autoOrganizeGrid } from '@/lib/autoOrganizeGrid';
 
 // ─── Builder State ─────────────────────────────────────────────────
 
 interface BuilderState {
   // Data
+  username: string;
   blocks: Block[];
   grid: GridConfig;
   theme: ThemeConfig;
@@ -38,10 +40,13 @@ interface BuilderState {
   updateBlockContent: <T extends BlockType>(id: string, content: Partial<BlockContentMap[T]>) => void;
   updateBlockStyle: (id: string, style: Partial<BlockStyle>) => void;
   updateBlockPosition: (id: string, position: GridPosition) => void;
+  resizeBlock: (id: string, w: number, h: number) => void;
   toggleBlockVisibility: (id: string) => void;
   reorderBlocks: (activeId: string, overId: string) => void;
+  autoOrganizeBlocks: (columns: number) => void;
   selectBlock: (id: string | null) => void;
   setIsDragging: (isDragging: boolean) => void;
+  shiftBlockIndex: (id: string, delta: number) => void;
 
   // Grid & Theme
   updateGrid: (grid: Partial<GridConfig>) => void;
@@ -52,6 +57,7 @@ interface BuilderState {
   // Persistence
   setBlocks: (blocks: Block[]) => void;
   loadProfile: (data: {
+    username: string;
     blocks: Block[];
     grid: GridConfig;
     theme: ThemeConfig;
@@ -87,6 +93,7 @@ function findNextPosition(blocks: Block[], columns: number): GridPosition {
 export const useBuilderStore = create<BuilderState>()(
   immer((set, get) => ({
     // Initial data
+    username: '',
     blocks: [],
     grid: { ...DEFAULT_GRID_CONFIG },
     theme: { ...DEFAULT_THEME_CONFIG },
@@ -166,6 +173,18 @@ export const useBuilderStore = create<BuilderState>()(
       });
     },
 
+    resizeBlock: (id, w, h) => {
+      set((state) => {
+        const block = state.blocks.find((b) => b.id === id);
+        if (block) {
+          block.position.w = w;
+          block.position.h = h;
+          block.updatedAt = new Date().toISOString();
+          state.isDirty = true;
+        }
+      });
+    },
+
     toggleBlockVisibility: (id) => {
       set((state) => {
         const block = state.blocks.find((b) => b.id === id);
@@ -190,6 +209,13 @@ export const useBuilderStore = create<BuilderState>()(
       });
     },
 
+    autoOrganizeBlocks: (columns) => {
+      set((state) => {
+        state.blocks = autoOrganizeGrid(state.blocks, columns);
+        state.isDirty = true;
+      });
+    },
+
     selectBlock: (id) => {
       set((state) => {
         state.selectedBlockId = id;
@@ -199,6 +225,22 @@ export const useBuilderStore = create<BuilderState>()(
     setIsDragging: (isDragging) => {
       set((state) => {
         state.isDragging = isDragging;
+      });
+    },
+
+    shiftBlockIndex: (id, delta) => {
+      set((state) => {
+        const index = state.blocks.findIndex((b) => b.id === id);
+        if (index === -1) return;
+
+        const targetIndex = Math.max(0, Math.min(state.blocks.length - 1, index + delta));
+        if (targetIndex === index) return;
+
+        const [moved] = state.blocks.splice(index, 1);
+        if (moved) {
+          state.blocks.splice(targetIndex, 0, moved);
+          state.isDirty = true;
+        }
       });
     },
 
@@ -244,6 +286,7 @@ export const useBuilderStore = create<BuilderState>()(
 
     loadProfile: (data) => {
       set((state) => {
+        state.username = data.username;
         state.blocks = data.blocks;
         state.grid = data.grid;
         state.theme = data.theme;
@@ -273,6 +316,7 @@ export const useBuilderStore = create<BuilderState>()(
     setIsPublished: (isPublished) => {
       set((state) => {
         state.isPublished = isPublished;
+        state.isDirty = true;
       });
     },
   })),

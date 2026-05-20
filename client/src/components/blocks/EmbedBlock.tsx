@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@bentobox/shared';
+import type { Block } from '@/types';
 
 interface EmbedBlockProps {
   block: Block<'embed'>;
@@ -36,10 +36,36 @@ export function EmbedBlock({ block, isEditing }: EmbedBlockProps) {
     );
   }
 
+  const processedUrl = (() => {
+    if (!embedUrl) return '';
+    try {
+      if (platform === 'spotify') {
+        // Convert open.spotify.com/track/XYZ to open.spotify.com/embed/track/XYZ
+        if (embedUrl.includes('open.spotify.com') && !embedUrl.includes('/embed/')) {
+          const urlObj = new URL(embedUrl);
+          return `https://open.spotify.com/embed${urlObj.pathname}`;
+        }
+      } else if (platform === 'youtube') {
+        // Convert youtube.com/watch?v=XYZ or youtu.be/XYZ to youtube.com/embed/XYZ
+        if (embedUrl.includes('youtube.com/watch')) {
+          const urlObj = new URL(embedUrl);
+          const videoId = urlObj.searchParams.get('v');
+          if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+        } else if (embedUrl.includes('youtu.be/')) {
+          const videoId = embedUrl.split('youtu.be/')[1]?.split('?')[0];
+          if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+        }
+      }
+    } catch (e) {
+      // If URL parsing fails, return original
+    }
+    return embedUrl;
+  })();
+
   return (
     <div className="w-full h-full overflow-hidden rounded-inherit" style={{ aspectRatio }}>
       <iframe
-        src={embedUrl}
+        src={processedUrl}
         className="w-full h-full border-0"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"

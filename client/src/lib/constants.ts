@@ -21,6 +21,12 @@ export const BLOCK_TYPE_LABELS: Record<string, string> = {
   social: '👤 Social',
   header: '✨ Header',
   spacer: '↕️ Spacer',
+  vibeTracker: '🎧 Vibe Tracker',
+  progressBar: '📊 Progress Bar',
+  lanyard: '🎮 Discord Lanyard',
+  animatedText: '🔤 Animated Text',
+  digitalPet: '🐾 Digital Pet',
+  timeline: '⏳ Timeline',
 };
 
 export const BLOCK_TYPE_DESCRIPTIONS: Record<string, string> = {
@@ -31,4 +37,10 @@ export const BLOCK_TYPE_DESCRIPTIONS: Record<string, string> = {
   social: 'Link to a social media profile',
   header: 'Add a profile header section',
   spacer: 'Add empty space between blocks',
+  vibeTracker: 'Show what you\'re currently into',
+  progressBar: 'Track progress toward a goal',
+  lanyard: 'Show real-time Discord status and activity',
+  animatedText: 'Add cyber text with glitch or hacker effects',
+  digitalPet: 'An interactive tamagotchi pixel pet block',
+  timeline: 'A sleek vertical micro-resume timeline',
 };

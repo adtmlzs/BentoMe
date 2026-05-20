@@ -1,10 +1,12 @@
 'use client';
 
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import type { Block } from '@bentobox/shared';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import type { Block } from '@/types';
 import { useBuilderStore } from '@/stores/builderStore';
 import { getBlockStyles } from '@/lib/utils';
+import { getGlassClass } from '@/lib/cursorStyles';
+import { useResponsiveGrid } from '@/hooks/useResponsiveGrid';
 
 interface BlockWrapperProps {
   block: Block;
@@ -16,87 +18,230 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
   const selectBlock = useBuilderStore((s) => s.selectBlock);
   const removeBlock = useBuilderStore((s) => s.removeBlock);
   const toggleBlockVisibility = useBuilderStore((s) => s.toggleBlockVisibility);
+  const resizeBlock = useBuilderStore((s) => s.resizeBlock);
+  const shiftBlockIndex = useBuilderStore((s) => s.shiftBlockIndex);
+  const blocksCount = useBuilderStore((s) => s.blocks.length);
+  const blockIndex = useBuilderStore((s) => s.blocks.findIndex((b) => b.id === block.id));
+  const columns = useBuilderStore((s) => s.grid.columns);
+  const glassmorphismLevel = useBuilderStore((s) => s.theme.glassmorphismLevel);
+
+  // Detect mobile for size clamping in UI
+  const { isMobile } = useResponsiveGrid([]);
+  const maxCols = isMobile ? 2 : columns;
 
   const isSelected = selectedBlockId === block.id;
+  const glassClass = getGlassClass(glassmorphismLevel);
+  const isFirst = blockIndex === 0;
+  const isLast = blockIndex === blocksCount - 1;
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: block.id });
+  // Custom size input state
+  const [customW, setCustomW] = useState(String(block.position.w));
+  const [customH, setCustomH] = useState(String(block.position.h));
 
+  // Sync custom inputs when block size changes externally
+  useEffect(() => {
+    setCustomW(String(block.position.w));
+    setCustomH(String(block.position.h));
+  }, [block.position.w, block.position.h]);
+
+  const applyCustomSize = useCallback(() => {
+    const w = Math.max(1, Math.min(maxCols, parseInt(customW, 10) || 1));
+    const h = Math.max(1, Math.min(6, parseInt(customH, 10) || 1));
+    setCustomW(String(w));
+    setCustomH(String(h));
+    resizeBlock(block.id, w, h);
+  }, [customW, customH, maxCols, block.id, resizeBlock]);
+
+  // Keyboard shortcuts when this block is selected
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (!isSelected) return;
+    // Don't intercept if user is typing in the custom size inputs
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+    switch (e.key) {
+      case 'ArrowUp':
+        e.preventDefault();
+        shiftBlockIndex(block.id, -maxCols);
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        shiftBlockIndex(block.id, maxCols);
+        break;
+      case 'ArrowLeft':
+        e.preventDefault();
+        if (!isFirst) shiftBlockIndex(block.id, -1);
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        if (!isLast) shiftBlockIndex(block.id, 1);
+        break;
+      case 'Delete':
+      case 'Backspace':
+        if (e.metaKey || e.ctrlKey) {
+          e.preventDefault();
+          removeBlock(block.id);
+        }
+        break;
+    }
+  }, [isSelected, isFirst, isLast, block.id, maxCols, shiftBlockIndex, removeBlock]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
+  // Responsive size presets — filter out sizes wider than max columns
+  const sizePresets = [
+    { w: 1, h: 1 }, { w: 2, h: 1 }, { w: 2, h: 2 },
+    { w: 3, h: 1 }, { w: 3, h: 2 },
+    { w: 4, h: 1 }, { w: 4, h: 2 },
+  ].filter((s) => s.w <= maxCols);
+
+  // Display width respects mobile clamping
+  const displayW = Math.min(block.position.w, maxCols);
+
+  // CSS Grid span — the ONLY layout mechanism. No x/y.
   const style: React.CSSProperties = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    gridColumn: `span ${block.position.w}`,
+    gridColumn: `span ${displayW}`,
     gridRow: `span ${block.position.h}`,
-    opacity: isDragging ? 0.5 : block.isVisible ? 1 : 0.4,
-    zIndex: isDragging ? 50 : isSelected ? 10 : 1,
+    opacity: block.isVisible ? 1 : 0.4,
+    zIndex: isSelected ? 50 : 1,
     ...getBlockStyles(block.style),
     position: 'relative',
-    cursor: 'grab',
-    overflow: 'hidden',
+    overflow: isSelected ? 'visible' : 'hidden',
   };
 
   return (
-    <div
-      ref={setNodeRef}
+    <motion.div
+      layout
+      transition={{ type: 'spring', stiffness: 400, damping: 28, mass: 0.8 }}
       style={style}
-      className={`group transition-all duration-200 ${
+      className={`group cursor-pointer ${glassClass} ${
         isSelected
-          ? 'ring-2 ring-violet-500 ring-offset-2 ring-offset-transparent'
+          ? 'ring-2 ring-violet-500/80 shadow-[0_0_30px_rgba(139,92,246,0.2)]'
           : 'hover:ring-1 hover:ring-white/20'
       }`}
       onClick={(e) => {
         e.stopPropagation();
-        selectBlock(block.id);
+        selectBlock(isSelected ? null : block.id);
       }}
-      {...attributes}
-      {...listeners}
     >
       {/* Block content */}
-      {children}
-
-      {/* Hover overlay with actions */}
-      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleBlockVisibility(block.id);
-          }}
-          className="w-7 h-7 rounded-lg bg-black/60 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/80 transition-all"
-          title={block.isVisible ? 'Hide block' : 'Show block'}
-        >
-          {block.isVisible ? (
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-          ) : (
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-            </svg>
-          )}
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            removeBlock(block.id);
-          }}
-          className="w-7 h-7 rounded-lg bg-red-500/60 backdrop-blur-sm flex items-center justify-center text-white/90 hover:bg-red-500 transition-all"
-          title="Delete block"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-        </button>
+      <div className="w-full h-full overflow-hidden">
+        {children}
       </div>
 
-      {/* Drag handle indicator */}
-      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-8 h-1 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-    </div>
+      {/* ─── Floating Toolbar (renders below the block) ──────────── */}
+      <AnimatePresence>
+        {isSelected && (
+          <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.97 }}
+            transition={{ duration: 0.12 }}
+            className="absolute left-1/2 z-[60] flex flex-col items-center gap-1.5 pt-2"
+            style={{ top: '100%', transform: 'translateX(-50%)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* ─── Toolbar Row: Arrows + Actions ─────────────────── */}
+            <div className="flex items-center gap-1 px-1.5 py-1 bg-zinc-900/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl shadow-black/60">
+              {/* D-Pad: ↑ ↓ ← → */}
+              <button
+                disabled={blockIndex < maxCols}
+                onClick={() => shiftBlockIndex(block.id, -maxCols)}
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-xs font-bold"
+                title="Move up row (↑)"
+              >↑</button>
+              <button
+                disabled={blockIndex + maxCols >= blocksCount}
+                onClick={() => shiftBlockIndex(block.id, maxCols)}
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-xs font-bold"
+                title="Move down row (↓)"
+              >↓</button>
+              <button
+                disabled={isFirst}
+                onClick={() => shiftBlockIndex(block.id, -1)}
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-xs font-bold"
+                title="Move left (←)"
+              >←</button>
+              <button
+                disabled={isLast}
+                onClick={() => shiftBlockIndex(block.id, 1)}
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-xs font-bold"
+                title="Move right (→)"
+              >→</button>
+
+              {/* Divider */}
+              <div className="w-px h-5 bg-white/10 mx-0.5" />
+
+              {/* Visibility */}
+              <button
+                onClick={() => toggleBlockVisibility(block.id)}
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all text-[10px]"
+                title={block.isVisible ? 'Hide' : 'Show'}
+              >
+                {block.isVisible ? '👁️' : '🚫'}
+              </button>
+              {/* Delete */}
+              <button
+                onClick={() => removeBlock(block.id)}
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-400 hover:text-red-300 transition-all text-[10px]"
+                title="Delete"
+              >✕</button>
+            </div>
+
+            {/* ─── Size Row: Presets + Custom Input ───────────────── */}
+            <div className="flex items-center gap-1 px-1.5 py-1 bg-zinc-900/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl shadow-black/60">
+              {/* Presets */}
+              {sizePresets.map((size) => {
+                const isActive = block.position.w === size.w && block.position.h === size.h;
+                return (
+                  <button
+                    key={`${size.w}x${size.h}`}
+                    onClick={() => resizeBlock(block.id, size.w, size.h)}
+                    className={`px-2 py-0.5 text-[10px] font-semibold rounded-md transition-all ${
+                      isActive
+                        ? 'bg-violet-500 text-white shadow-lg shadow-violet-500/30'
+                        : 'bg-white/[0.06] text-white/50 hover:bg-white/[0.12] hover:text-white'
+                    }`}
+                  >
+                    {size.w}×{size.h}
+                  </button>
+                );
+              })}
+
+              {/* Divider */}
+              <div className="w-px h-5 bg-white/10 mx-0.5" />
+
+              {/* Custom WxH input */}
+              <div className="flex items-center gap-0.5">
+                <input
+                  type="number"
+                  min={1}
+                  max={maxCols}
+                  value={customW}
+                  onChange={(e) => setCustomW(e.target.value)}
+                  onBlur={applyCustomSize}
+                  onKeyDown={(e) => { if (e.key === 'Enter') applyCustomSize(); }}
+                  className="w-8 h-6 text-center text-[10px] font-bold text-white bg-white/[0.08] border border-white/10 rounded-md focus:outline-none focus:ring-1 focus:ring-violet-500/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+                <span className="text-[10px] font-bold text-white/30">×</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={6}
+                  value={customH}
+                  onChange={(e) => setCustomH(e.target.value)}
+                  onBlur={applyCustomSize}
+                  onKeyDown={(e) => { if (e.key === 'Enter') applyCustomSize(); }}
+                  className="w-8 h-6 text-center text-[10px] font-bold text-white bg-white/[0.08] border border-white/10 rounded-md focus:outline-none focus:ring-1 focus:ring-violet-500/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

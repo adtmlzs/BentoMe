@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+  <br />
+  <img src="[INSERT_LOGO_OR_GIF_HERE]" alt="BentoMe Logo" width="120" />
+  <h1>🍱 BentoMe</h1>
+  <p><strong>The modern, cyber-aesthetic profile builder for creators and founders.</strong></p>
+  <p>Build stunning, highly-interactive bento-grid personal websites in seconds. Features flawless drag-and-drop mechanics, a dense packing CSS grid engine, and gorgeous glassmorphism aesthetics.</p>
+</div>
 
-## Getting Started
+<br />
 
-First, run the development server:
+## 🛠 Tech Stack
 
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-4A4A55?style=for-the-badge)
+
+<br />
+
+## ✨ Features
+
+- **Dense Packing Grid Engine**: A sophisticated 1D-array-to-CSS-Grid engine that automatically mathematically reflows and densely packs differently sized blocks (1x1 to 4x2).
+- **Draft & Publish Workflow**: Make edits safely in your browser, preview your bento box, and push to production with a single click.
+- **Micro-Resume (Timeline Block)**: A vertically scrolling experience/education timeline designed for professionals.
+- **Dynamic Blocks**: Embed Spotify tracks, YouTube videos, animated typing text, interactive digital pets, and GitHub metrics directly into your grid.
+- **High-End Aesthetics**: Cyberpunk themes, glassmorphism layers, dynamic WebGL canvas physics backgrounds, and fluid Framer Motion spring physics.
+- **Responsive Clamping**: Layouts automatically restructure and clamp widths on mobile viewports without destroying desktop configuration data.
+
+<br />
+
+## 📸 Preview
+
+*Drop a screenshot or GIF of the builder here:*
+
+![BentoMe Builder Preview]([INSERT_SCREENSHOT_HERE])
+
+<br />
+
+## 🚀 Quick Start
+
+Follow these steps to run BentoMe locally.
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/[YOUR_USERNAME]/bentome.git
+cd bentome/client
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Environment Variables
+Copy the `.env.example` file to create a `.env.local` file:
+```bash
+cp .env.example .env.local
+```
+Then, insert your Supabase URL and Anon Key into the `.env.local` file. You will need a Supabase project with a `profiles` table configured.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Run the Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-## Learn More
+<br />
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔒 Security Note
+Ensure your `.env.local` file is never committed to GitHub. The `.gitignore` is configured to prevent this by default.

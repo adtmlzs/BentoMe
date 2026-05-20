@@ -27,13 +27,13 @@ export default function LandingPage() {
         </div>
         <div className="flex items-center gap-3">
           <Link
-            href="/builder"
+            href="/login"
             className="px-4 py-2 text-sm text-white/70 hover:text-white transition-colors"
           >
             Log in
           </Link>
           <Link
-            href="/builder"
+            href="/register"
             className="px-5 py-2 rounded-xl bg-violet-500 text-white text-sm font-semibold hover:bg-violet-600 transition-colors shadow-lg shadow-violet-500/25"
           >
             Get Started — it&apos;s free
@@ -74,7 +74,7 @@ export default function LandingPage() {
 
           <div className="flex items-center justify-center gap-4">
             <Link
-              href="/builder"
+              href="/register"
               className="px-8 py-3.5 rounded-xl bg-violet-500 text-white font-semibold hover:bg-violet-600 transition-all shadow-xl shadow-violet-500/30 hover:shadow-violet-500/40 hover:scale-105 active:scale-95"
             >
               Start Building →
