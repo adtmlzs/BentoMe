@@ -4,21 +4,22 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
-import type { DigitalPetBlockContent } from '@/types';
+import type { DigitalPetBlockContent, ThemeConfig } from '@/types';
 
 interface DigitalPetBlockProps {
   content: DigitalPetBlockContent;
   isEditing?: boolean;
+  theme?: ThemeConfig;
 }
 
-export function DigitalPetBlock({ content, isEditing }: DigitalPetBlockProps) {
+export function DigitalPetBlock({ content, isEditing, theme }: DigitalPetBlockProps) {
   const params = useParams();
   const username = params?.username as string;
   const [clicks, setClicks] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isJumping, setIsJumping] = useState(false);
   const [hearts, setHearts] = useState<{ id: number; x: number }[]>([]);
-  let heartCounter = 0;
+  const isLight = theme?.mode === 'light';
 
   // Fetch initial clicks if viewing a profile
   useEffect(() => {
@@ -61,9 +62,11 @@ export function DigitalPetBlock({ content, isEditing }: DigitalPetBlockProps) {
     }
   };
 
+  const eyeColor = isLight ? '#FFFFFF' : '#0F0F0F';
+
   return (
     <div
-      className="flex flex-col items-center justify-center h-full gap-4 cursor-pointer select-none relative overflow-hidden px-4 py-6"
+      className="flex flex-col items-center justify-center h-full gap-4 cursor-pointer select-none relative overflow-hidden px-4 py-6 w-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
@@ -79,9 +82,9 @@ export function DigitalPetBlock({ content, isEditing }: DigitalPetBlockProps) {
           width="64"
           height="64"
           viewBox="0 0 16 16"
-          fill="white"
+          fill={isLight ? '#18181b' : 'white'}
           xmlns="http://www.w3.org/2000/svg"
-          style={{ filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.3))' }}
+          style={{ filter: isLight ? 'drop-shadow(0 0 8px rgba(0,0,0,0.15))' : 'drop-shadow(0 0 10px rgba(255,255,255,0.3))' }}
         >
           <path d="M4 1h8v1h1v1h1v8h-1v1h-1v1h-1v-1h-1v1h-2v-1h-1v1h-2v-1h-1v-1h-1v-8h1v-1h1v-1z" />
           
@@ -89,23 +92,23 @@ export function DigitalPetBlock({ content, isEditing }: DigitalPetBlockProps) {
           {isJumping ? (
             // Happy eyes ^ ^
             <>
-              <path fill="#0F0F0F" d="M4 6h1v1h-1zM6 6h1v1h-1z" />
-              <path fill="#0F0F0F" d="M5 5h1v1h-1z" />
+              <path fill={eyeColor} d="M4 6h1v1h-1zM6 6h1v1h-1z" />
+              <path fill={eyeColor} d="M5 5h1v1h-1z" />
               
-              <path fill="#0F0F0F" d="M9 6h1v1h-1zM11 6h1v1h-1z" />
-              <path fill="#0F0F0F" d="M10 5h1v1h-1z" />
+              <path fill={eyeColor} d="M9 6h1v1h-1zM11 6h1v1h-1z" />
+              <path fill={eyeColor} d="M10 5h1v1h-1z" />
             </>
           ) : isHovered ? (
             // Open eyes O O
             <>
-              <rect x="4" y="5" width="2" height="3" fill="#0F0F0F" />
-              <rect x="10" y="5" width="2" height="3" fill="#0F0F0F" />
+              <rect x="4" y="5" width="2" height="3" fill={eyeColor} />
+              <rect x="10" y="5" width="2" height="3" fill={eyeColor} />
             </>
           ) : (
             // Sleepy eyes - -
             <>
-              <rect x="4" y="6" width="2" height="1" fill="#0F0F0F" />
-              <rect x="10" y="6" width="2" height="1" fill="#0F0F0F" />
+              <rect x="4" y="6" width="2" height="1" fill={eyeColor} />
+              <rect x="10" y="6" width="2" height="1" fill={eyeColor} />
             </>
           )}
 
@@ -139,12 +142,12 @@ export function DigitalPetBlock({ content, isEditing }: DigitalPetBlockProps) {
 
       {/* Pet Stats */}
       <div className="flex flex-col items-center">
-        <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase">
+        <span className={`text-[10px] font-bold tracking-widest ${isLight ? 'text-zinc-500' : 'text-white/40'} uppercase`}>
           {content.petName || 'Digital Pet'}
         </span>
-        <div className="flex items-center gap-1.5 mt-1 bg-white/10 px-3 py-1 rounded-full border border-white/10">
+        <div className={`flex items-center gap-1.5 mt-1 ${isLight ? 'bg-zinc-100 border-zinc-200' : 'bg-white/10 border-white/10'} px-3 py-1 rounded-full border`}>
           <span className="text-xs">✨</span>
-          <span className="text-xs font-bold text-white tabular-nums tracking-wider">
+          <span className={`text-xs font-bold ${isLight ? 'text-zinc-900' : 'text-white'} tabular-nums tracking-wider`}>
             {clicks}
           </span>
         </div>

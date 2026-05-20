@@ -22,8 +22,9 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
   const shiftBlockIndex = useBuilderStore((s) => s.shiftBlockIndex);
   const blocksCount = useBuilderStore((s) => s.blocks.length);
   const blockIndex = useBuilderStore((s) => s.blocks.findIndex((b) => b.id === block.id));
+  const theme = useBuilderStore((s) => s.theme);
+  const glassmorphismLevel = theme.glassmorphismLevel;
   const columns = useBuilderStore((s) => s.grid.columns);
-  const glassmorphismLevel = useBuilderStore((s) => s.theme.glassmorphismLevel);
 
   // Detect mobile for size clamping in UI
   const { isMobile } = useResponsiveGrid([]);
@@ -107,7 +108,7 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
     gridRow: `span ${block.position.h}`,
     opacity: block.isVisible ? 1 : 0.4,
     zIndex: isSelected ? 50 : 1,
-    ...getBlockStyles(block.style),
+    ...getBlockStyles(block.style, theme),
     position: 'relative',
     overflow: isSelected ? 'visible' : 'hidden',
   };

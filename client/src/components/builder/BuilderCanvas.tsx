@@ -60,7 +60,7 @@ export function BuilderCanvas() {
       <div style={gridStyle} className="relative z-10">
         {responsiveBlocks.map((block) => (
           <BlockWrapper key={block.id} block={block}>
-            <BlockRenderer block={block} isEditing />
+            <BlockRenderer block={block} isEditing theme={theme} />
           </BlockWrapper>
         ))}
 

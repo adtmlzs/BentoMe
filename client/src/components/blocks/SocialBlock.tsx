@@ -1,10 +1,11 @@
 'use client';
 
-import type { Block } from '@/types';
+import type { Block, ThemeConfig } from '@/types';
 
 interface SocialBlockProps {
   block: Block<'social'>;
   isEditing?: boolean;
+  theme?: ThemeConfig;
 }
 
 const PLATFORM_ICONS: Record<string, string> = {
@@ -35,15 +36,16 @@ const PLATFORM_COLORS: Record<string, string> = {
   behance: '#1769FF',
 };
 
-export function SocialBlock({ block, isEditing }: SocialBlockProps) {
+export function SocialBlock({ block, isEditing, theme }: SocialBlockProps) {
   const { platform, handle, url, icon } = block.content;
+  const isLight = theme?.mode === 'light';
 
   const platformLower = platform.toLowerCase();
   const displayIcon = icon ?? PLATFORM_ICONS[platformLower] ?? '🌐';
   const bgColor = PLATFORM_COLORS[platformLower];
   const bgStyle = bgColor?.startsWith('linear')
     ? { backgroundImage: bgColor }
-    : { backgroundColor: bgColor ?? 'rgba(255,255,255,0.1)' };
+    : { backgroundColor: bgColor ?? (isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.1)') };
 
   const content = (
     <div className="flex items-center gap-3 w-full h-full">
@@ -54,8 +56,8 @@ export function SocialBlock({ block, isEditing }: SocialBlockProps) {
         {displayIcon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-white font-medium text-sm capitalize">{platform}</p>
-        <p className="text-white/40 text-xs truncate">@{handle}</p>
+        <p className={`font-medium text-sm capitalize ${isLight ? 'text-zinc-900' : 'text-white'}`}>{platform}</p>
+        <p className={`text-xs truncate ${isLight ? 'text-zinc-500' : 'text-white/40'}`}>@{handle}</p>
       </div>
     </div>
   );

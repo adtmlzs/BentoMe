@@ -2,18 +2,20 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import type { Block } from '@/types';
+import type { Block, ThemeConfig } from '@/types';
 
 interface VibeTrackerBlockProps {
   block: Block<'vibeTracker'>;
   isEditing?: boolean;
+  theme?: ThemeConfig;
 }
 
 const CYCLE_INTERVAL_MS = 3000;
 
-export function VibeTrackerBlock({ block }: VibeTrackerBlockProps) {
+export function VibeTrackerBlock({ block, theme }: VibeTrackerBlockProps) {
   const { items } = block.content;
   const [activeIndex, setActiveIndex] = useState(0);
+  const isLight = theme?.mode === 'light';
 
   const advance = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % items.length);
@@ -28,7 +30,7 @@ export function VibeTrackerBlock({ block }: VibeTrackerBlockProps) {
 
   if (items.length === 0) {
     return (
-      <div className="flex items-center justify-center w-full h-full text-white/30 text-sm">
+      <div className={`flex items-center justify-center w-full h-full text-sm ${isLight ? 'text-zinc-400' : 'text-white/30'}`}>
         No vibes yet
       </div>
     );
@@ -52,7 +54,9 @@ export function VibeTrackerBlock({ block }: VibeTrackerBlockProps) {
                 backgroundColor:
                   i === activeIndex
                     ? 'rgba(167, 139, 250, 0.8)'
-                    : 'rgba(255, 255, 255, 0.15)',
+                    : isLight 
+                      ? 'rgba(0, 0, 0, 0.15)' 
+                      : 'rgba(255, 255, 255, 0.15)',
               }}
             />
           ))}
@@ -74,10 +78,10 @@ export function VibeTrackerBlock({ block }: VibeTrackerBlockProps) {
             </span>
           )}
           <div className="min-w-0">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-violet-300/70 leading-none mb-0.5">
+            <p className={`text-[10px] font-semibold uppercase tracking-widest leading-none mb-0.5 ${isLight ? 'text-violet-700/80' : 'text-violet-300/70'}`}>
               {current.label}
             </p>
-            <p className="text-white text-sm font-medium truncate leading-snug">
+            <p className={`text-sm font-medium truncate leading-snug ${isLight ? 'text-zinc-900' : 'text-white'}`}>
               {current.value}
             </p>
           </div>

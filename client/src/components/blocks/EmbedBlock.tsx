@@ -1,10 +1,11 @@
 'use client';
 
-import type { Block } from '@/types';
+import type { Block, ThemeConfig } from '@/types';
 
 interface EmbedBlockProps {
   block: Block<'embed'>;
   isEditing?: boolean;
+  theme?: ThemeConfig;
 }
 
 const PLATFORM_COLORS: Record<string, string> = {
@@ -15,12 +16,13 @@ const PLATFORM_COLORS: Record<string, string> = {
   twitter: '#1DA1F2',
 };
 
-export function EmbedBlock({ block, isEditing }: EmbedBlockProps) {
+export function EmbedBlock({ block, isEditing, theme }: EmbedBlockProps) {
   const { platform, embedUrl, aspectRatio = '16/9' } = block.content;
+  const isLight = theme?.mode === 'light';
 
   if (isEditing) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-white/60">
+      <div className={`w-full h-full flex flex-col items-center justify-center gap-2 ${isLight ? 'text-zinc-600' : 'text-white/60'}`}>
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
           style={{ backgroundColor: PLATFORM_COLORS[platform] ?? '#666' }}

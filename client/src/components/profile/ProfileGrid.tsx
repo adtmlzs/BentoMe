@@ -97,10 +97,10 @@ export function ProfileGrid({ blocks, grid, theme, staggered = false }: ProfileG
             style={{
               gridColumn: `span ${block.position.w}`,
               gridRow: `span ${block.position.h}`,
-              ...getBlockStyles(block.style),
+              ...getBlockStyles(block.style, theme),
             }}
           >
-            <BlockRenderer block={block} />
+            <BlockRenderer block={block} theme={theme} />
           </motion.div>
         ))}
       </motion.div>

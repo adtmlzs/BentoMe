@@ -2,15 +2,18 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import type { AnimatedTextBlockContent } from '@/types';
+import type { AnimatedTextBlockContent, ThemeConfig } from '@/types';
 
 interface AnimatedTextBlockProps {
   content: AnimatedTextBlockContent;
+  theme?: ThemeConfig;
 }
 
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
 
-export function AnimatedTextBlock({ content }: AnimatedTextBlockProps) {
+export function AnimatedTextBlock({ content, theme }: AnimatedTextBlockProps) {
+  const isLight = theme?.mode === 'light';
+
   const alignClass = {
     left: 'text-left',
     center: 'text-center',
@@ -30,7 +33,8 @@ export function AnimatedTextBlock({ content }: AnimatedTextBlockProps) {
     bold: 'font-bold',
   }[content.fontWeight || 'normal'];
 
-  const combinedClasses = `${alignClass} ${sizeClass} ${weightClass} font-mono w-full`;
+  const colorClass = isLight ? 'text-zinc-950' : 'text-white';
+  const combinedClasses = `${alignClass} ${sizeClass} ${weightClass} ${colorClass} font-mono w-full`;
 
   // 1. Glitch
   if (content.textAnimation === 'glitch') {

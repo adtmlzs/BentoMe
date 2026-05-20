@@ -1,15 +1,17 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import type { Block } from '@/types';
+import type { Block, ThemeConfig } from '@/types';
 
 interface ProgressBarBlockProps {
   block: Block<'progressBar'>;
   isEditing?: boolean;
+  theme?: ThemeConfig;
 }
 
-export function ProgressBarBlock({ block }: ProgressBarBlockProps) {
+export function ProgressBarBlock({ block, theme }: ProgressBarBlockProps) {
   const { title, currentValue, targetValue } = block.content;
+  const isLight = theme?.mode === 'light';
 
   const clampedCurrent = Math.max(0, currentValue);
   const clampedTarget = Math.max(1, targetValue); // avoid division by zero
@@ -22,16 +24,16 @@ export function ProgressBarBlock({ block }: ProgressBarBlockProps) {
     <div className="flex flex-col justify-center w-full h-full gap-2 select-none">
       {/* Header row */}
       <div className="flex items-baseline justify-between gap-2">
-        <p className="text-white text-sm font-medium truncate leading-snug">
+        <p className={`${isLight ? 'text-zinc-900' : 'text-white'} text-sm font-medium truncate leading-snug`}>
           {title}
         </p>
-        <span className="text-[11px] font-semibold text-violet-300/80 tabular-nums flex-shrink-0">
+        <span className={`text-[11px] font-semibold ${isLight ? 'text-violet-600' : 'text-violet-300/80'} tabular-nums flex-shrink-0`}>
           {percentage}%
         </span>
       </div>
 
       {/* Outer track */}
-      <div className="relative w-full h-3 rounded-full bg-white/[0.06] overflow-hidden">
+      <div className={`relative w-full h-3 rounded-full ${isLight ? 'bg-zinc-200/80' : 'bg-white/[0.06]'} overflow-hidden`}>
         {/* Inner fill — animated on viewport entry */}
         <motion.div
           className="absolute inset-y-0 left-0 rounded-full"
@@ -70,11 +72,11 @@ export function ProgressBarBlock({ block }: ProgressBarBlockProps) {
 
       {/* Footer values */}
       <div className="flex items-center justify-between">
-        <span className="text-[10px] text-white/30 tabular-nums">
+        <span className={`text-[10px] ${isLight ? 'text-zinc-500' : 'text-white/30'} tabular-nums`}>
           {clampedCurrent.toLocaleString()} / {clampedTarget.toLocaleString()}
         </span>
         {percentage >= 100 && (
-          <span className="text-[10px] font-medium text-emerald-400/80">
+          <span className={`text-[10px] font-medium ${isLight ? 'text-emerald-600' : 'text-emerald-400/80'}`}>
             ✓ Complete
           </span>
         )}

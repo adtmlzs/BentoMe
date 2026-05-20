@@ -1,10 +1,11 @@
 'use client';
 
-import type { Block } from '@/types';
+import type { Block, ThemeConfig } from '@/types';
 
 interface TextBlockProps {
   block: Block<'text'>;
   isEditing?: boolean;
+  theme?: ThemeConfig;
 }
 
 const FONT_SIZE_MAP = {
@@ -26,11 +27,13 @@ const TEXT_ALIGN_MAP = {
   right: 'text-right',
 } as const;
 
-export function TextBlock({ block }: TextBlockProps) {
+export function TextBlock({ block, theme }: TextBlockProps) {
   const { text, fontSize = 'md', fontWeight = 'normal', textAlign = 'left', fontFamily } = block.content;
+  const isLight = theme?.mode === 'light';
 
   const classes = [
-    'text-white w-full h-full flex items-center',
+    isLight ? 'text-zinc-900' : 'text-white',
+    'w-full h-full flex items-center',
     FONT_SIZE_MAP[fontSize],
     FONT_WEIGHT_MAP[fontWeight],
     TEXT_ALIGN_MAP[textAlign],

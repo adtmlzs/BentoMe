@@ -114,6 +114,13 @@ export default function RegisterPage() {
             )}
 
             <form onSubmit={handleRegister} className="space-y-4">
+              <div className="p-3.5 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-300 text-[11px] flex items-start gap-2.5 mb-2 leading-relaxed">
+                <span className="text-sm flex-shrink-0">✉️</span>
+                <p>
+                  A verification email will be sent to your given email. Please click the link to verify your account before logging in.
+                </p>
+              </div>
+
               <div>
                 <label className="block text-xs font-medium text-white/45 mb-1.5">Email Address</label>
                 <input
