@@ -161,7 +161,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-white/5 py-8 text-center">
         <p className="text-sm text-white/20">
-          🍱 BentoBox — Built for creators, by creators.
+          🍱 BentoLink — Built for creators, by creators.
         </p>
       </footer>
     </div>

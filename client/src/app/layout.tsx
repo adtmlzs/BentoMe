@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "BentoBox — Build Your Aesthetic Profile",
+  title: "BentoLink — Build Your Aesthetic Profile",
   description:
     "Create stunning, interactive bento-grid profiles. Drag, drop, and customize blocks to build your perfect portfolio — no code required.",
   keywords: ["bento", "profile", "portfolio", "link in bio", "creator tools"],

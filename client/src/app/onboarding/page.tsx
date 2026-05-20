@@ -176,7 +176,7 @@ export default function OnboardingPage() {
             position: { x: 0, y: 1, w: 2, h: 2 },
             content: {
               title: 'Welcome 🍱',
-              text: 'This is your brand new BentoBox. Click Edit to customize this space and drag tiles around!',
+              text: 'This is your brand new BentoLink. Click Edit to customize this space and drag tiles around!',
             },
             style: {
               borderRadius: 16,
@@ -241,7 +241,7 @@ export default function OnboardingPage() {
       >
         <div className="text-center mb-8">
           <span className="text-4xl mb-2 block">🎨</span>
-          <h1 className="text-2xl font-bold text-white mb-2">Claim your BentoBox space</h1>
+          <h1 className="text-2xl font-bold text-white mb-2">Claim your BentoLink space</h1>
           <p className="text-sm text-white/40">Customize your public handle and styling template</p>
         </div>
 
@@ -275,7 +275,7 @@ export default function OnboardingPage() {
             <div>
               <label className="block text-xs font-medium text-white/45 mb-2">Choose Username</label>
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30 text-sm">bentobox.me/</span>
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30 text-sm">bentolink.me/</span>
                 <input
                   type="text"
                   required

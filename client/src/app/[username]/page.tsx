@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       .maybeSingle()) as any;
 
     if (profile) {
-      const title = `${profile.display_name} (@${username.toLowerCase()}) | BentoBox`;
-      const description = profile.bio || `Check out ${profile.display_name}'s interactive BentoBox grid.`;
+      const title = `${profile.display_name} (@${username.toLowerCase()}) | BentoLink`;
+      const description = profile.bio || `Check out ${profile.display_name}'s interactive BentoLink grid.`;
       return {
         title,
         description,
@@ -34,8 +34,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `@${username.toLowerCase()} | BentoBox`,
-    description: `Check out @${username.toLowerCase()}'s interactive BentoBox grid.`,
+    title: `@${username.toLowerCase()} | BentoLink`,
+    description: `Check out @${username.toLowerCase()}'s interactive BentoLink grid.`,
   };
 }
 

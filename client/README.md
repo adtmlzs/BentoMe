@@ -22,7 +22,7 @@
 ## ✨ Features
 
 - **Dense Packing Grid Engine**: A sophisticated 1D-array-to-CSS-Grid engine that automatically mathematically reflows and densely packs differently sized blocks (1x1 to 4x2).
-- **Draft & Publish Workflow**: Make edits safely in your browser, preview your bento box, and push to production with a single click.
+- **Draft & Publish Workflow**: Make edits safely in your browser, preview your bento link, and push to production with a single click.
 - **Micro-Resume (Timeline Block)**: A vertically scrolling experience/education timeline designed for professionals.
 - **Dynamic Blocks**: Embed Spotify tracks, YouTube videos, animated typing text, interactive digital pets, and GitHub metrics directly into your grid.
 - **High-End Aesthetics**: Cyberpunk themes, glassmorphism layers, dynamic WebGL canvas physics backgrounds, and fluid Framer Motion spring physics.

@@ -1,5 +1,5 @@
 -- ============================================================
--- BentoBox — Supabase Migration: Create profiles table + RLS
+-- BentoLink — Supabase Migration: Create profiles table + RLS
 -- ============================================================
 
 -- 1. Create the profiles table
