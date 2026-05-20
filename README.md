@@ -1,6 +1,5 @@
 <div align="center">
   <br />
-  <img src="[INSERT_LOGO_OR_GIF_HERE]" alt="BentoMe Logo" width="120" />
   <h1>🍱 BentoMe</h1>
   <p><strong>The modern, cyber-aesthetic profile builder for creators and founders.</strong></p>
   <p>Build stunning, highly-interactive bento-grid personal websites in seconds. Features flawless drag-and-drop mechanics, a dense packing CSS grid engine, and gorgeous glassmorphism aesthetics.</p>
