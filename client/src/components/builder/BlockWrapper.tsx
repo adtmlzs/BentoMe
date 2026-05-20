@@ -145,30 +145,30 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
             onClick={(e) => e.stopPropagation()}
           >
             {/* ─── Toolbar Row: Arrows + Actions ─────────────────── */}
-            <div className="flex items-center gap-1 px-1.5 py-1 bg-zinc-900/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl shadow-black/60">
+            <div className="flex flex-wrap items-center justify-center gap-1.5 px-2 py-1.5 bg-zinc-900/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl shadow-black/60 max-w-[90vw] md:max-w-none">
               {/* D-Pad: ↑ ↓ ← → */}
               <button
                 disabled={blockIndex < maxCols}
                 onClick={() => shiftBlockIndex(block.id, -maxCols)}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-xs font-bold"
+                className="w-9 h-9 md:w-7 md:h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-sm md:text-xs font-bold"
                 title="Move up row (↑)"
               >↑</button>
               <button
                 disabled={blockIndex + maxCols >= blocksCount}
                 onClick={() => shiftBlockIndex(block.id, maxCols)}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-xs font-bold"
+                className="w-9 h-9 md:w-7 md:h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-sm md:text-xs font-bold"
                 title="Move down row (↓)"
               >↓</button>
               <button
                 disabled={isFirst}
                 onClick={() => shiftBlockIndex(block.id, -1)}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-xs font-bold"
+                className="w-9 h-9 md:w-7 md:h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-sm md:text-xs font-bold"
                 title="Move left (←)"
               >←</button>
               <button
                 disabled={isLast}
                 onClick={() => shiftBlockIndex(block.id, 1)}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-xs font-bold"
+                className="w-9 h-9 md:w-7 md:h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all disabled:opacity-20 disabled:cursor-not-allowed text-sm md:text-xs font-bold"
                 title="Move right (→)"
               >→</button>
 
@@ -178,7 +178,7 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
               {/* Visibility */}
               <button
                 onClick={() => toggleBlockVisibility(block.id)}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all text-[10px]"
+                className="w-9 h-9 md:w-7 md:h-7 flex items-center justify-center rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-white/70 hover:text-white transition-all text-xs md:text-[10px]"
                 title={block.isVisible ? 'Hide' : 'Show'}
               >
                 {block.isVisible ? '👁️' : '🚫'}
@@ -186,13 +186,13 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
               {/* Delete */}
               <button
                 onClick={() => removeBlock(block.id)}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-400 hover:text-red-300 transition-all text-[10px]"
+                className="w-9 h-9 md:w-7 md:h-7 flex items-center justify-center rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-400 hover:text-red-300 transition-all text-xs md:text-[10px]"
                 title="Delete"
               >✕</button>
             </div>
 
             {/* ─── Size Row: Presets + Custom Input ───────────────── */}
-            <div className="flex items-center gap-1 px-1.5 py-1 bg-zinc-900/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl shadow-black/60">
+            <div className="flex flex-wrap items-center justify-center gap-1.5 px-2 py-1.5 bg-zinc-900/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl shadow-black/60 max-w-[90vw] md:max-w-none">
               {/* Presets */}
               {sizePresets.map((size) => {
                 const isActive = block.position.w === size.w && block.position.h === size.h;
@@ -200,7 +200,7 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
                   <button
                     key={`${size.w}x${size.h}`}
                     onClick={() => resizeBlock(block.id, size.w, size.h)}
-                    className={`px-2 py-0.5 text-[10px] font-semibold rounded-md transition-all ${
+                    className={`px-3 py-1.5 md:px-2 md:py-0.5 text-xs md:text-[10px] font-semibold rounded-md transition-all ${
                       isActive
                         ? 'bg-violet-500 text-white shadow-lg shadow-violet-500/30'
                         : 'bg-white/[0.06] text-white/50 hover:bg-white/[0.12] hover:text-white'
@@ -215,7 +215,7 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
               <div className="w-px h-5 bg-white/10 mx-0.5" />
 
               {/* Custom WxH input */}
-              <div className="flex items-center gap-0.5">
+              <div className="flex items-center gap-1">
                 <input
                   type="number"
                   min={1}
@@ -224,9 +224,9 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
                   onChange={(e) => setCustomW(e.target.value)}
                   onBlur={applyCustomSize}
                   onKeyDown={(e) => { if (e.key === 'Enter') applyCustomSize(); }}
-                  className="w-8 h-6 text-center text-[10px] font-bold text-white bg-white/[0.08] border border-white/10 rounded-md focus:outline-none focus:ring-1 focus:ring-violet-500/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-10 h-7 md:w-8 md:h-6 text-center text-xs md:text-[10px] font-bold text-white bg-white/[0.08] border border-white/10 rounded-md focus:outline-none focus:ring-1 focus:ring-violet-500/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
-                <span className="text-[10px] font-bold text-white/30">×</span>
+                <span className="text-xs md:text-[10px] font-bold text-white/30">×</span>
                 <input
                   type="number"
                   min={1}
@@ -235,7 +235,7 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
                   onChange={(e) => setCustomH(e.target.value)}
                   onBlur={applyCustomSize}
                   onKeyDown={(e) => { if (e.key === 'Enter') applyCustomSize(); }}
-                  className="w-8 h-6 text-center text-[10px] font-bold text-white bg-white/[0.08] border border-white/10 rounded-md focus:outline-none focus:ring-1 focus:ring-violet-500/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-10 h-7 md:w-8 md:h-6 text-center text-xs md:text-[10px] font-bold text-white bg-white/[0.08] border border-white/10 rounded-md focus:outline-none focus:ring-1 focus:ring-violet-500/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
             </div>

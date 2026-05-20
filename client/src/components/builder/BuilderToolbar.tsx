@@ -54,19 +54,19 @@ export function BuilderToolbar() {
   };
 
   return (
-    <header className="h-14 bg-zinc-950 border-b border-white/5 flex items-center justify-between px-4 flex-shrink-0">
+    <header className="h-14 bg-zinc-950 border-b border-white/5 flex items-center justify-between px-3 md:px-4 flex-shrink-0">
       {/* Left side — Logo */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 md:gap-3">
         <span className="text-xl">🍱</span>
-        <h1 className="text-base font-bold text-white">
+        <h1 className="hidden md:block text-base font-bold text-white">
           Bento<span className="text-violet-400">Link</span>
         </h1>
-        <span className="text-white/20 text-xs">|</span>
-        <span className="text-white/40 text-xs">Builder</span>
+        <span className="hidden md:inline text-white/20 text-xs">|</span>
+        <span className="text-white/40 text-xs font-medium">Builder</span>
       </div>
 
       {/* Center — Status */}
-      <div className="flex items-center gap-2">
+      <div className="hidden md:flex items-center gap-2">
         {isSaving && (
           <div className="flex items-center gap-1.5 text-xs text-white/40">
             <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
@@ -104,13 +104,14 @@ export function BuilderToolbar() {
         <button
           onClick={handlePublish}
           disabled={isSaving || (!isDirty && isPublished)}
-          className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+          className={`px-3 md:px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             (!isDirty && isPublished)
-              ? 'bg-white/5 text-white/30 cursor-default' // Disabled state
+              ? 'bg-white/5 text-white/30 cursor-default'
               : 'bg-violet-500 text-white hover:bg-violet-600 shadow-lg shadow-violet-500/25 cursor-pointer'
           }`}
         >
-          {isSaving ? 'Publishing...' : (!isDirty && isPublished) ? '✓ Published' : 'Draft - Click to Publish'}
+          <span className="md:hidden">{isSaving ? '...' : (!isDirty && isPublished) ? 'Live' : 'Publish'}</span>
+          <span className="hidden md:inline">{isSaving ? 'Publishing...' : (!isDirty && isPublished) ? '✓ Published' : 'Draft - Click to Publish'}</span>
         </button>
       </div>
     </header>

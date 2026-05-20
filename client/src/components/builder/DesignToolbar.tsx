@@ -52,11 +52,21 @@ export function DesignToolbar() {
       {/* Toggle Button — floating bottom-right */}
       <motion.button
         onClick={() => setIsOpen((p) => !p)}
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center text-xl shadow-2xl hover:bg-white/20 transition-colors cursor-pointer"
-        whileHover={{ scale: 1.1 }}
+        className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center gap-1.5 text-xs shadow-2xl hover:bg-white/20 transition-colors cursor-pointer text-white font-semibold"
+        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        {isOpen ? '✕' : '🎨'}
+        {isOpen ? (
+          <>
+            <span className="text-sm">✕</span>
+            <span>Close</span>
+          </>
+        ) : (
+          <>
+            <span className="text-sm">🎨</span>
+            <span>Design</span>
+          </>
+        )}
       </motion.button>
 
       {/* Panel */}
@@ -67,7 +77,7 @@ export function DesignToolbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-            className="fixed bottom-20 right-6 z-50 w-80 max-h-[70vh] rounded-2xl bg-zinc-900/90 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col"
+            className="fixed bottom-20 left-4 right-4 md:left-auto md:right-6 z-50 md:w-80 max-h-[70vh] rounded-2xl bg-zinc-900/90 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col"
           >
             {/* Header */}
             <div className="px-4 pt-4 pb-2 flex justify-between items-start">

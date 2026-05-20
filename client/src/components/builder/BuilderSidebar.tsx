@@ -63,9 +63,24 @@ export function BuilderSidebar() {
       {/* Mobile Toggle Button - floating bottom-left */}
       <button
         onClick={() => setIsOpen((p) => !p)}
-        className="md:hidden fixed bottom-6 left-6 z-50 w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center text-xl shadow-2xl hover:bg-white/20 transition-colors cursor-pointer"
+        className="md:hidden fixed bottom-6 left-6 z-50 px-4 py-3 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-xs shadow-2xl flex items-center gap-1.5 active:scale-95 transition-all border border-white/10 cursor-pointer"
       >
-        {isOpen ? '✕' : (selectedBlock ? '⚙️' : '➕')}
+        {isOpen ? (
+          <>
+            <span className="text-sm">✕</span>
+            <span>Close</span>
+          </>
+        ) : selectedBlock ? (
+          <>
+            <span className="text-sm">⚙️</span>
+            <span>Edit Block</span>
+          </>
+        ) : (
+          <>
+            <span className="text-sm">➕</span>
+            <span>Add Block</span>
+          </>
+        )}
       </button>
 
       {/* Mobile Backdrop */}
