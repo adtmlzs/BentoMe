@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-  <h1>🍱 BentoMe</h1>
+  <h1>🍱 BentoLink</h1>
   <p><strong>The modern, cyber-aesthetic profile builder for creators and founders.</strong></p>
   <p>Build stunning, highly-interactive bento-grid personal websites in seconds. Features flawless drag-and-drop mechanics, a dense packing CSS grid engine, and gorgeous glassmorphism aesthetics.</p>
 </div>
@@ -33,18 +33,18 @@
 
 *Drop a screenshot or GIF of the builder here:*
 
-![BentoMe Builder Preview]([INSERT_SCREENSHOT_HERE])
+![BentoLink Builder Preview]([INSERT_SCREENSHOT_HERE])
 
 <br />
 
 ## 🚀 Quick Start
 
-Follow these steps to run BentoMe locally.
+Follow these steps to run BentoLink locally.
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/[YOUR_USERNAME]/bentome.git
-cd bentome/client
+git clone https://github.com/[YOUR_USERNAME]/bentolink.git
+cd bentolink/client
 ```
 
 ### 2. Install dependencies

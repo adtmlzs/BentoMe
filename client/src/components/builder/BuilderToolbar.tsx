@@ -59,7 +59,7 @@ export function BuilderToolbar() {
       <div className="flex items-center gap-3">
         <span className="text-xl">🍱</span>
         <h1 className="text-base font-bold text-white">
-          Bento<span className="text-violet-400">Box</span>
+          Bento<span className="text-violet-400">Link</span>
         </h1>
         <span className="text-white/20 text-xs">|</span>
         <span className="text-white/40 text-xs">Builder</span>

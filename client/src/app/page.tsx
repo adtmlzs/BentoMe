@@ -22,7 +22,7 @@ export default function LandingPage() {
         <div className="flex items-center gap-2">
           <span className="text-2xl">🍱</span>
           <span className="text-lg font-bold text-white">
-            Bento<span className="text-violet-400">Box</span>
+            Bento<span className="text-violet-400">Link</span>
           </span>
         </div>
         <div className="flex items-center gap-3">

@@ -68,7 +68,7 @@ function LoginPageContent() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 text-2xl font-bold mb-3">
             <span>🍱</span>
-            <span className="text-white">Bento<span className="text-violet-400">Box</span></span>
+            <span className="text-white">Bento<span className="text-violet-400">Link</span></span>
           </Link>
           <h2 className="text-xl font-semibold text-white/90">Welcome back</h2>
           <p className="text-sm text-white/40 mt-1">Sign in to customize your bento grid</p>
