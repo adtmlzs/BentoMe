@@ -582,7 +582,7 @@ export function BlockSettings({ block }: BlockSettingsProps) {
       </div>
 
       {/* Content fields */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24 md:pb-4">
         <SectionTitle>Content</SectionTitle>
         {renderContentFields()}
 
