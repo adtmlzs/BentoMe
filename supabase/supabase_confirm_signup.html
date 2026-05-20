@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Your BentoLink Account</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #09090b;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #e4e4e7;
+    }
+    table {
+      border-spacing: 0;
+      width: 100%;
+    }
+    td {
+      padding: 0;
+    }
+    img {
+      border: 0;
+    }
+    .wrapper {
+      width: 100%;
+      table-layout: fixed;
+      background-color: #09090b;
+      padding-top: 48px;
+      padding-bottom: 48px;
+    }
+    .main-table {
+      background-color: #18181b;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 20px;
+      border: 1px solid #27272a;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+    }
+    .header-section {
+      text-align: center;
+      padding: 40px 40px 24px 40px;
+    }
+    .logo-container {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-accent {
+      color: #a78bfa;
+    }
+    .content-section {
+      padding: 0 40px 40px 40px;
+      text-align: center;
+    }
+    .title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      font-size: 14px;
+      line-height: 20px;
+      color: #a1a1aa;
+      margin-top: 0;
+      margin-bottom: 32px;
+    }
+    .email-highlight {
+      color: #a78bfa;
+      font-weight: 500;
+    }
+    .button-container {
+      margin-bottom: 36px;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 14px 36px;
+      background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+      color: #ffffff !important;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: 9999px;
+      box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.3), 0 4px 6px -2px rgba(124, 58, 237, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .divider {
+      height: 1px;
+      background-color: #27272a;
+      margin-bottom: 28px;
+    }
+    .info-card {
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: left;
+      margin-bottom: 28px;
+    }
+    .info-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-top: 0;
+      margin-bottom: 4px;
+    }
+    .info-text {
+      font-size: 12px;
+      line-height: 16px;
+      color: #71717a;
+      margin: 0;
+    }
+    .info-link {
+      color: #71717a;
+      word-break: break-all;
+    }
+    .footer-section {
+      text-align: center;
+      font-size: 11px;
+      color: #52525b;
+      line-height: 16px;
+      padding-top: 12px;
+    }
+    .footer-link {
+      color: #a78bfa;
+      text-decoration: none;
+      opacity: 0.8;
+    }
+    .footer-link:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <center class="wrapper">
+    <table class="main-table">
+      <tr>
+        <td class="header-section">
+          <div class="logo-container">
+            <span>🍱</span> Bento<span class="logo-accent">Link</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="content-section">
+          <h1 class="title">Verify Your Email</h1>
+          <p class="subtitle">
+            Welcome to BentoLink! We are excited to help you build your personalized, cyber-aesthetic bento profile. Please confirm your email address (<span class="email-highlight">{{ .Email }}</span>) to activate your account.
+          </p>
+          
+          <div class="button-container">
+            <a class="cta-button" href="{{ .ConfirmationURL }}" target="_blank">Verify Email Address</a>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="info-card">
+            <p class="info-title">💡 Verification Details</p>
+            <p class="info-text" style="margin-bottom: 12px;">
+              Once verified, you will be automatically redirected to the sign-in page to start building.
+            </p>
+            <p class="info-title">🔗 Raw Link</p>
+            <p class="info-text">
+              If the button doesn't work, copy and paste this URL into your browser: <br>
+              <a href="{{ .ConfirmationURL }}" class="info-link">{{ .ConfirmationURL }}</a>
+            </p>
+          </div>
+
+          <div class="footer-section">
+            <p style="margin-top: 0; margin-bottom: 8px;">
+              Sent by <a href="https://bentolink.vercel.app" class="footer-link">BentoLink</a>. If you did not create an account, please ignore this email.
+            </p>
+            <p style="margin: 0;">
+              &copy; 2026 BentoLink. All rights reserved.
+            </p>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </center>
+</body>
+</html>

@@ -30,6 +30,10 @@ export default function RegisterPage() {
         const { error: signUpError, data } = await supabase.auth.signUp({
           email,
           password,
+          options: {
+            // Redirect user back to BentoLink production website after verifying email
+            emailRedirectTo: 'https://bentolink.vercel.app/login',
+          },
         });
 
         if (signUpError) {
@@ -41,11 +45,10 @@ export default function RegisterPage() {
           // If password sign up succeeded, check if session is active (auto-login enabled in Supabase default settings)
           const { data: sessionData } = await supabase.auth.getSession();
           if (sessionData.session) {
-            router.push('/onboarding');
-            router.refresh();
-          } else {
-            setSuccess(true);
+            // Force sign-out to prevent auto-login, so the user MUST verify and sign in manually!
+            await supabase.auth.signOut();
           }
+          setSuccess(true);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unexpected error occurred');
@@ -79,16 +82,23 @@ export default function RegisterPage() {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-6"
           >
-            <div className="text-4xl mb-3">✉️</div>
-            <h3 className="text-lg font-semibold text-white mb-2">Check your email</h3>
-            <p className="text-sm text-white/45 mb-6">
-              We sent a verification link to <span className="text-violet-400 font-medium">{email}</span>. Please click the link to confirm your account.
+            <div className="text-4xl mb-4 animate-pulse">✉️</div>
+            <h3 className="text-lg font-bold text-white mb-2">Verification Email Sent</h3>
+            <p className="text-sm text-white/60 mb-6 leading-relaxed">
+              We have sent a verification link to <span className="text-violet-400 font-semibold">{email}</span>.<br />
+              Please check your email inbox and click the verification link to activate your account.
             </p>
+            <div className="p-4 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs mb-6 text-left flex items-start gap-2">
+              <span className="text-sm">💡</span>
+              <p>
+                <strong>Next Steps:</strong> Check your inbox (and spam folder). Once you click the link, you will be redirected to verify, and then you can return here to sign in.
+              </p>
+            </div>
             <Link
               href="/login"
-              className="inline-block py-2.5 px-6 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-sm transition-colors"
+              className="inline-block w-full py-3 px-4 rounded-xl bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white font-semibold text-sm transition-all shadow-lg shadow-violet-500/20 hover:scale-[1.01] text-center"
             >
-              Back to Sign In
+              Proceed to Sign In
             </Link>
           </motion.div>
         ) : (
